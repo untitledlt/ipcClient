@@ -1,0 +1,22 @@
+{
+  "name": "ipcclient",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/untitled.lt/ipcClient.git"
+  },
+  "keywords": [
+    "ipc"
+  ],
+  "author": "Arnaldas Augutis",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/untitled.lt/ipcClient/issues"
+  },
+  "homepage": "https://gitlab.com/untitled.lt/ipcClient#README"
+}
