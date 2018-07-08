@@ -31,7 +31,7 @@ class ipcClient extends EventEmitter {
         if (typeof ipc.of.master !== 'undefined') {
             ipc.of.master.emit(
                 this.name,
-                JSON.stringify({ topic, payload })
+                { topic, payload }
             )
         } else {
             console.error('Connection not ready yet!');
