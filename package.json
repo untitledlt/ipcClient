@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://gitlab.com/untitled.lt/ipcClient/issues"
   },
-  "homepage": "https://gitlab.com/untitled.lt/ipcClient#README"
+  "homepage": "https://gitlab.com/untitled.lt/ipcClient#README",
+  "dependencies": {
+    "node-ipc": "^9.1.1"
+  }
 }
