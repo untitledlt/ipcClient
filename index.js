@@ -1,7 +1,6 @@
 const EventEmitter = require('events');
 const ipc = require('node-ipc');
 
-
 class ipcClient extends EventEmitter {
     constructor({name}) {
         super();
