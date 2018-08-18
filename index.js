@@ -38,7 +38,6 @@ class ipcClient extends EventEmitter {
     }
 
     _resolvePromise({requestId, data}) {
-        console.log(`Got data to requestId: ${requestId}`)
         const promiseObject = this.promises.find(item => item.requestId === requestId);
         if (promiseObject) {
             this._removePromise(promiseObject)
@@ -50,13 +49,11 @@ class ipcClient extends EventEmitter {
     _removePromise(ref) {
         const index = this.promises.indexOf(ref);
         if (index !== -1) {
-            console.log(`Remove promise with requestId: ${ref.requestId}`);
             this.promises.splice(index, 1);
         }
     }
 
     addPromise({requestId, resolve, reject, timeout = 2000}) {
-        console.log(`Add promise with requestId: ${requestId}`);
         let promiseObject;
         promiseObject = {
             requestId,
