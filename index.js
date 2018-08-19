@@ -24,24 +24,21 @@ class ipcClient extends EventEmitter {
         );
     }
 
-    _onMessage(data) {
-        const {payload = {}} = data;
-        const {requestId} = payload;
-
+    _onMessage({ requestId, payload }) {
         if (requestId) {
-            this._resolvePromise({requestId, data});
+            this._resolvePromise({ requestId, payload });
 
         } else {
-            this.emit('message', data);
+            this.emit('message', payload);
         }
     }
 
-    _resolvePromise({requestId, data}) {
+    _resolvePromise({ requestId, payload }) {
         const promiseObject = this.promises.find(item => item.requestId === requestId);
         if (promiseObject) {
             this._removePromise(promiseObject)
             clearTimeout(promiseObject.rejectTimer);
-            promiseObject.resolve(data);
+            promiseObject.resolve(payload);
         }
     }
 
@@ -52,24 +49,34 @@ class ipcClient extends EventEmitter {
         }
     }
 
-    addPromise({requestId, resolve, reject, timeout = 2000}) {
-        let promiseObject;
-        promiseObject = {
-            requestId,
-            resolve,
-            rejectTimer: setTimeout(() => {
-                this._removePromise(promiseObject);
-            }, timeout)
-        };
+    request({ topic, payload, timeout = 2000 }) {
+        if (!(payload instanceof Object)) {
+            throw 'Payload not an object';
+        }
+
+        const requestId = Date.now() + Math.random();
+        const promiseObject = { requestId };
+
+        const rejectTimer = setTimeout(() => {
+            promiseObject.reject({ success: false, reason: 'timeout' });
+            this._removePromise(promiseObject);
+        }, timeout);
+
+        const promise = new Promise((resolve, reject) => {
+            promiseObject.resolve = resolve;
+            promiseObject.reject = reject;
+        });
 
         this.promises.push(promiseObject);
+        this.send(topic, payload, requestId);
+        return promise;
     }
 
-    send(topic = '', payload) {
+    send(topic = '', payload, requestId) {
         if (typeof ipc.of.master !== 'undefined') {
             ipc.of.master.emit(
                 this.name,
-                {topic, payload}
+                {topic, payload, requestId}
             )
         } else {
             console.error('Connection not ready yet!');
