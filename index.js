@@ -5,7 +5,7 @@ class ipcClient extends EventEmitter {
     constructor({name}) {
         super();
         if (!name) {
-            throw 'No client name provided!';
+            throw new Error('No client name provided!');
         }
         console.info(`Creating ipc client with ID ${name}`);
         this.name = name;
