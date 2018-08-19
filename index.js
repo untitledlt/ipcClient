@@ -68,11 +68,11 @@ class ipcClient extends EventEmitter {
         });
 
         this.promises.push(promiseObject);
-        this.send(topic, payload, requestId);
+        this.send({ topic, payload, requestId });
         return promise;
     }
 
-    send(topic = '', payload, requestId) {
+    send({ topic = '', payload, requestId }) {
         if (typeof ipc.of.master !== 'undefined') {
             ipc.of.master.emit(
                 this.name,
