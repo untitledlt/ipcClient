@@ -24,16 +24,16 @@ class ipcClient extends EventEmitter {
         );
     }
 
-    _onMessage({ requestId, payload }) {
+    _onMessage({ topic, payload, requestId }) {
         if (requestId) {
-            this._resolvePromise({ requestId, payload });
+            this._resolvePromise({ requestId, topic, payload });
 
         } else {
-            this.emit('message', payload);
+            this.emit('message', { topic, payload });
         }
     }
 
-    _resolvePromise({ requestId, payload }) {
+    _resolvePromise({ payload, requestId }) {
         const promiseObject = this.promises.find(item => item.requestId === requestId);
         if (promiseObject) {
             this._removePromise(promiseObject)
@@ -50,10 +50,6 @@ class ipcClient extends EventEmitter {
     }
 
     request({ topic, payload, timeout = 2000 }) {
-        if (!(payload instanceof Object)) {
-            throw 'Payload not an object';
-        }
-
         const requestId = Date.now() + Math.random();
         const promiseObject = { requestId };
 
